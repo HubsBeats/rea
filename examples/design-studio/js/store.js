@@ -204,3 +204,42 @@ export class Store {
     return ok;
   }
 }
+
+const NAV_KEY = "pixelpad:nav";
+
+/**
+ * Query parameters for the editor. Some hosts drop the query string when
+ * navigating between pages, so the last requested one is also kept in
+ * sessionStorage.
+ */
+export function editorParams() {
+  let search = location.search;
+  if (!search) {
+    try {
+      search = sessionStorage.getItem(NAV_KEY) ?? "";
+    } catch {
+      search = "";
+    }
+  }
+  return new URLSearchParams(search);
+}
+
+/** Opens the editor with the given query string, e.g. "?id=…". */
+export function openEditor(search) {
+  try {
+    sessionStorage.setItem(NAV_KEY, search);
+  } catch {
+    // Storage unavailable: the query string alone has to do.
+  }
+  location.href = `editor.html${search}`;
+}
+
+/** Routes clicks on links to the editor through openEditor. */
+export function trackEditorLinks() {
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest?.('a[href^="editor.html"]');
+    if (!link || e.defaultPrevented || e.button !== 0) return;
+    e.preventDefault();
+    openEditor(new URL(link.href).search);
+  });
+}

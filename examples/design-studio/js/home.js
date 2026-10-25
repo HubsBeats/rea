@@ -4,7 +4,14 @@ import { DESIGN_PRESETS, createDesign } from "./model.js";
 import { TEMPLATES, buildTemplate } from "./library.js";
 import { renderPage } from "./exporter.js";
 import { contextMenu, h, openPopover, closePopover, toast } from "./popover.js";
-import { deleteDesign, listDesigns, loadDesign, saveDesign } from "./store.js";
+import {
+  deleteDesign,
+  listDesigns,
+  loadDesign,
+  openEditor,
+  saveDesign,
+  trackEditorLinks,
+} from "./store.js";
 
 const $ = (sel) => document.querySelector(sel);
 let query = "";
@@ -33,6 +40,35 @@ function renderCategories() {
       ),
     ),
   );
+}
+
+function renameDesign(anchor, entry) {
+  const input = h("input.search", {
+    value: entry.title,
+    "aria-label": "Design name",
+  });
+  const save = () => {
+    const design = loadDesign(entry.id);
+    const title = input.value.trim();
+    if (design && title) {
+      design.title = title;
+      saveDesign(design, entry.thumb);
+      renderRecent();
+    }
+    closePopover();
+  };
+  input.addEventListener("keydown", (e) => e.key === "Enter" && save());
+  openPopover(
+    anchor,
+    h(
+      "div.panel-pop",
+      {},
+      h("h4", {}, "Rename design"),
+      input,
+      h("button.btn-primary.wide", { onclick: save }, "Save"),
+    ),
+  );
+  setTimeout(() => input.select(), 0);
 }
 
 function renderRecent() {
@@ -65,19 +101,11 @@ function renderRecent() {
         contextMenu({ x: r.left, y: r.bottom }, [
           {
             label: "Open",
-            run: () => (location.href = `editor.html?id=${d.id}`),
+            run: () => openEditor(`?id=${d.id}`),
           },
           {
             label: "Rename",
-            run: () => {
-              const title = prompt("Rename design", d.title);
-              const design = loadDesign(d.id);
-              if (title && design) {
-                design.title = title;
-                saveDesign(design, d.thumb);
-                renderRecent();
-              }
-            },
+            run: () => renameDesign(more, d),
           },
           {
             label: "Delete",
@@ -152,7 +180,7 @@ function customSize(anchor) {
     if (!(width >= 40 && height >= 40 && width <= 8000 && height <= 8000))
       return toast("Use a size between 40 and 8000px.");
     closePopover();
-    location.href = `editor.html?w=${width}&h=${height}`;
+    openEditor(`?w=${width}&h=${height}`);
   };
   openPopover(
     anchor,
@@ -199,6 +227,7 @@ $("#hero-search").addEventListener("input", (e) => {
   renderTemplates();
 });
 
+trackEditorLinks();
 renderCategories();
 renderRecent();
 renderTemplates();

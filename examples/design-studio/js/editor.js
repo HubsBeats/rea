@@ -10,7 +10,15 @@ import { Interactions } from "./interact.js";
 import { DESIGN_PRESETS, createDesign, createImage, uid } from "./model.js";
 import { Panels } from "./panels.js";
 import { closePopover, contextMenu, h, openPopover, toast } from "./popover.js";
-import { Store, deleteDesign, loadDesign, saveDesign } from "./store.js";
+import {
+  Store,
+  deleteDesign,
+  editorParams,
+  loadDesign,
+  openEditor,
+  saveDesign,
+  trackEditorLinks,
+} from "./store.js";
 import { Toolbar } from "./toolbar.js";
 import { bindKeyboard } from "./keyboard.js";
 import { TEMPLATES, buildTemplate } from "./library.js";
@@ -18,7 +26,7 @@ import { TEMPLATES, buildTemplate } from "./library.js";
 const $ = (sel) => document.querySelector(sel);
 
 function initialDesign() {
-  const params = new URLSearchParams(location.search);
+  const params = editorParams();
   const saved = params.get("id") && loadDesign(params.get("id"));
   if (saved) return saved;
   const preset = DESIGN_PRESETS.find((p) => p.id === params.get("preset"));
@@ -126,7 +134,7 @@ function fileMenu() {
         title: `Copy of ${store.design.title}`,
       };
       saveDesign(copy);
-      location.href = `editor.html?id=${copy.id}`;
+      openEditor(`?id=${copy.id}`);
     }),
     item("Save", () => save(true), "Ctrl+S"),
     item("Download", () => openDownload($("#share"))),
@@ -135,12 +143,34 @@ function fileMenu() {
       exportDesign(store.design, { format: "json" }),
     ),
     h("hr"),
-    item("Delete design", () => {
-      if (confirm("Delete this design? This can't be undone.")) {
-        deleteDesign(store.design.id);
-        location.href = "index.html";
-      }
-    }),
+    item("Delete design", () => confirmDelete()),
+  );
+}
+
+function confirmDelete() {
+  openPopover(
+    $("#file-menu"),
+    h(
+      "div.panel-pop",
+      {},
+      h("h4", {}, "Delete this design?"),
+      h("p.muted", {}, "It will be removed from this browser for good."),
+      h(
+        "div.grid-2",
+        {},
+        h("button.btn-secondary", { onclick: () => closePopover() }, "Cancel"),
+        h(
+          "button.btn-primary",
+          {
+            onclick: () => {
+              deleteDesign(store.design.id);
+              location.href = "index.html";
+            },
+          },
+          "Delete",
+        ),
+      ),
+    ),
   );
 }
 
@@ -488,6 +518,7 @@ store.on((reason) => {
   }
 });
 
+trackEditorLinks();
 bindKeyboard({ store, actions, interactions, save, fitZoom, panels });
 window.addEventListener("beforeunload", () => store.saved || store.persist());
 document.fonts?.addEventListener?.("loadingdone", () => view.render());
