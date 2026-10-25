@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pixelpad editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo+Black&family=Bebas+Neue&family=Caveat:wght@400;700&family=DM+Serif+Display&family=Inter:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,700;0,800;1,400&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/editor.css" />
+  </head>
+  <body class="editor">
+    <header class="topbar">
+      <a class="top-btn" href="index.html" title="Home"
+        ><span class="logo-dot" aria-hidden="true"></span>Home</a
+      >
+      <button class="top-btn" id="file-menu">File</button>
+      <button class="top-btn" id="resize-btn">Resize</button>
+      <span class="top-divider"></span>
+      <button
+        class="top-icon"
+        id="undo"
+        title="Undo (Ctrl+Z)"
+        aria-label="Undo"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3" />
+        </svg>
+      </button>
+      <button
+        class="top-icon"
+        id="redo"
+        title="Redo (Ctrl+Shift+Z)"
+        aria-label="Redo"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 14 5-5-5-5M20 9H10a6 6 0 0 0 0 12h3" />
+        </svg>
+      </button>
+      <span class="save-status" id="save-status" aria-live="polite"></span>
+      <span class="top-spacer"></span>
+      <input
+        class="title-input"
+        id="title"
+        aria-label="Design title"
+        spellcheck="false"
+      />
+      <span class="avatar" title="You" aria-hidden="true">P</span>
+      <button class="top-btn" id="present">Present</button>
+      <button class="share-btn" id="share">Share</button>
+    </header>
+    <div class="editor-body">
+      <nav class="rail" id="rail" aria-label="Side panel tabs"></nav>
+      <aside class="panel" id="panel"></aside>
+      <main class="main">
+        <div
+          class="context-toolbar"
+          id="toolbar"
+          role="toolbar"
+          aria-label="Element toolbar"
+        ></div>
+        <div class="workspace" id="workspace">
+          <div class="pages" id="pages"></div>
+          <button class="add-page" id="add-page">+ Add page</button>
+        </div>
+        <div class="notes-drawer">
+          <textarea
+            id="notes-text"
+            placeholder="Add notes for this page (shown while presenting)"
+          ></textarea>
+        </div>
+        <footer class="bottombar">
+          <button class="bottom-btn" id="notes-btn">Notes</button>
+          <span class="bottom-spacer"></span>
+          <span class="page-indicator" id="page-indicator"></span>
+          <input
+            type="range"
+            id="zoom-range"
+            min="10"
+            max="300"
+            aria-label="Zoom"
+          />
+          <button class="bottom-btn zoom-label" id="zoom-label">100%</button>
+          <button class="bottom-btn" id="zoom-fit" title="Fit page to screen">
+            Fit
+          </button>
+          <button class="bottom-btn" id="grid-btn" title="Grid view">
+            Pages
+          </button>
+        </footer>
+      </main>
+    </div>
+    <script type="module" src="js/editor.js"></script>
+  </body>
+</html>
