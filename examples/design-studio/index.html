@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pixelpad - Design anything</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=Caveat:wght@400;700&family=DM+Serif+Display&family=Inter:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700;800&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/home.css" />
+  </head>
+  <body class="home">
+    <header class="home-header">
+      <a class="brand" href="index.html"
+        ><span class="logo-dot" aria-hidden="true"></span>Pixelpad</a
+      >
+      <nav class="home-nav" aria-label="Main">
+        <a href="#create">Design spotlight</a>
+        <a href="#templates">Templates</a>
+        <a href="#recent">Projects</a>
+      </nav>
+      <span class="home-spacer"></span>
+      <button class="btn-secondary" id="custom-size">Custom size</button>
+      <button class="btn-primary" id="create-btn">Create a design</button>
+      <span class="avatar-home" aria-hidden="true">P</span>
+    </header>
+    <div class="home-body">
+      <aside class="home-side" aria-label="Sections">
+        <a class="side-link active" href="#create">Home</a>
+        <a class="side-link" href="#recent">Projects</a>
+        <a class="side-link" href="#templates">Templates</a>
+      </aside>
+      <main class="home-main">
+        <section class="hero" id="create">
+          <h1>What will you design today?</h1>
+          <div class="hero-search">
+            <input
+              id="hero-search"
+              placeholder="Search your designs and templates"
+              aria-label="Search"
+            />
+          </div>
+          <div class="categories" id="categories"></div>
+        </section>
+        <section class="home-section" id="recent">
+          <h2>Recent designs</h2>
+          <div class="design-grid" id="recent-grid"></div>
+        </section>
+        <section class="home-section" id="templates">
+          <h2>Start from a template</h2>
+          <div class="design-grid" id="template-grid"></div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="js/home.js"></script>
+  </body>
+</html>

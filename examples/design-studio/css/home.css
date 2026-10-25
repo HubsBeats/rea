@@ -1,0 +1,273 @@
+/* Home screen. */
+
+body.home {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+}
+
+.home-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line-2);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font:
+    700 22px "Poppins",
+    var(--font);
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand .logo-dot {
+  width: 28px;
+  height: 28px;
+}
+
+.home-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 16px;
+}
+
+.home-nav a {
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+
+.home-nav a:hover {
+  background: var(--surface-2);
+}
+
+.home-spacer {
+  flex: 1;
+}
+
+.avatar-home {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffbd59;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.home-body {
+  display: flex;
+  flex: 1;
+}
+
+.home-side {
+  width: 220px;
+  flex: none;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-right: 1px solid var(--line-2);
+}
+
+.side-link {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.side-link:hover {
+  background: var(--surface-2);
+}
+
+.side-link.active {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.home-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 40px 64px;
+}
+
+.hero {
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(255, 255, 255, 0.25),
+      transparent 40%
+    ),
+    linear-gradient(110deg, #00c4cc 0%, #5a32fa 55%, #7d2ae8 100%);
+  color: #fff;
+  padding: 48px 32px 28px;
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0 0 24px;
+  font:
+    800 40px "Montserrat",
+    var(--font);
+  letter-spacing: -0.02em;
+}
+
+.hero-search {
+  max-width: 640px;
+  margin: 0 auto 28px;
+}
+
+.hero-search input {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: 0;
+  padding: 0 20px;
+  font-size: 16px;
+  color: var(--ink);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.hero-search input:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.categories {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  width: 92px;
+}
+
+.category-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  transition: transform 0.15s;
+}
+
+.category:hover .category-icon {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.home-section {
+  margin-top: 36px;
+}
+
+.home-section h2 {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.design-card {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.design-card:hover .card-thumb {
+  box-shadow: 0 0 0 2px var(--brand);
+}
+
+.card-thumb img,
+.card-thumb canvas {
+  max-width: 88%;
+  max-height: 88%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.thumb-placeholder {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-meta small {
+  color: var(--muted);
+}
+
+.card-more {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.design-card:hover .card-more,
+.card-more:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  .home-side,
+  .home-nav {
+    display: none;
+  }
+  .home-main {
+    padding: 16px;
+  }
+  .hero h1 {
+    font-size: 28px;
+  }
+}
