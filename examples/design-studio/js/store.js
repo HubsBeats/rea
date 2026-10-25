@@ -207,13 +207,26 @@ export class Store {
 
 const NAV_KEY = "pixelpad:nav";
 
+function rememberNav(search) {
+  try {
+    sessionStorage.setItem(NAV_KEY, search);
+  } catch {
+    // Storage unavailable: the query string alone has to do.
+  }
+}
+
+/** True when home and editor share one document (the hosted build). */
+export function isSinglePage() {
+  return document.body.dataset.single === "1";
+}
+
 /**
  * Query parameters for the editor. Some hosts drop the query string when
  * navigating between pages, so the last requested one is also kept in
  * sessionStorage.
  */
 export function editorParams() {
-  let search = location.search;
+  let search = isSinglePage() ? "" : location.search;
   if (!search) {
     try {
       search = sessionStorage.getItem(NAV_KEY) ?? "";
@@ -224,22 +237,35 @@ export function editorParams() {
   return new URLSearchParams(search);
 }
 
-/** Opens the editor with the given query string, e.g. "?id=…". */
-export function openEditor(search) {
-  try {
-    sessionStorage.setItem(NAV_KEY, search);
-  } catch {
-    // Storage unavailable: the query string alone has to do.
-  }
-  location.href = `editor.html${search}`;
+/** Records the open design so a reload reopens it. */
+export function rememberDesign(id) {
+  rememberNav(`?id=${id}`);
+  if (!isSinglePage()) history.replaceState(null, "", `editor.html?id=${id}`);
 }
 
-/** Routes clicks on links to the editor through openEditor. */
+/** Opens the editor with the given query string, e.g. "?id=…". */
+export function openEditor(search) {
+  rememberNav(search);
+  if (isSinglePage()) location.reload();
+  else location.href = `editor.html${search}`;
+}
+
+/** Goes back to the home screen. */
+export function openHome() {
+  rememberNav("");
+  if (isSinglePage()) location.reload();
+  else location.href = "index.html";
+}
+
+/** Routes clicks on home and editor links through openHome/openEditor. */
 export function trackEditorLinks() {
   document.addEventListener("click", (e) => {
-    const link = e.target.closest?.('a[href^="editor.html"]');
+    const link = e.target.closest?.(
+      'a[href^="editor.html"], a[href="index.html"]',
+    );
     if (!link || e.defaultPrevented || e.button !== 0) return;
     e.preventDefault();
-    openEditor(new URL(link.href).search);
+    if (link.getAttribute("href") === "index.html") openHome();
+    else openEditor(new URL(link.href).search);
   });
 }

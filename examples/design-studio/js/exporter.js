@@ -205,15 +205,33 @@ function slug(text) {
   );
 }
 
-/** Triggers a browser download of a blob or data URL. */
-export function downloadUrl(url, filename) {
+/**
+ * Saves a file. Inside a claude.ai artifact the host's download prompt is
+ * used (sandboxed pages cannot start downloads); elsewhere a plain link.
+ */
+export async function saveFile(blob, filename) {
+  const host = await window.claude?.use?.("downloads").catch(() => null);
+  if (host) {
+    try {
+      await host.save({ filename, data: blob });
+      return true;
+    } catch (error) {
+      if (error?.code === "declined") return false;
+    }
+  }
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   document.body.append(a);
   a.click();
   a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return true;
 }
+
+const toBlob = (canvas, mime) =>
+  new Promise((resolve) => canvas.toBlob(resolve, mime, 0.92));
 
 /** Downloads pages as PNG/JPG images, or the design as JSON. */
 export async function exportDesign(
@@ -225,9 +243,7 @@ export async function exportDesign(
     const blob = new Blob([JSON.stringify(design, null, 2)], {
       type: "application/json",
     });
-    const url = URL.createObjectURL(blob);
-    downloadUrl(url, `${name}.pixelpad.json`);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    await saveFile(blob, `${name}.pixelpad.json`);
     return;
   }
   const mime = format === "jpg" ? "image/jpeg" : "image/png";
@@ -238,6 +254,10 @@ export async function exportDesign(
       design.pages.length > 1
         ? `-${page.title ? slug(page.title) : index}`
         : "";
-    downloadUrl(canvas.toDataURL(mime, 0.92), `${name}${suffix}.${format}`);
+    const saved = await saveFile(
+      await toBlob(canvas, mime),
+      `${name}${suffix}.${format}`,
+    );
+    if (!saved) return;
   }
 }

@@ -131,3 +131,10 @@ screenshot tools let you compare your rebuild against the original with
 `compare-web-screenshots`. The same commands were run against Pixelpad
 itself to check the workflow end to end. Use what you learn to understand
 behaviour, and keep the implementation, branding and assets your own.
+
+## One-link hosting
+
+`python3 examples/design-studio/build-single.py OUT_DIR` builds a version
+where the home screen and editor share one document, for hosts that serve a
+single page (such as a claude.ai artifact). There, downloads go through the
+host's save prompt when it offers one.

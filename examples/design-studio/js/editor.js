@@ -16,6 +16,8 @@ import {
   editorParams,
   loadDesign,
   openEditor,
+  openHome,
+  rememberDesign,
   saveDesign,
   trackEditorLinks,
 } from "./store.js";
@@ -39,11 +41,11 @@ function initialDesign() {
   });
   const template = TEMPLATES.find((t) => t.name === params.get("template"));
   if (template) Object.assign(design.pages[0], buildTemplate(template, design));
-  history.replaceState(null, "", `editor.html?id=${design.id}`);
   return design;
 }
 
 const store = new Store(initialDesign());
+rememberDesign(store.design.id);
 const actions = new Actions(store);
 const workspace = $("#workspace");
 const view = new CanvasView(store, $("#pages"));
@@ -126,7 +128,7 @@ function fileMenu() {
       ),
     ),
     h("hr"),
-    item("Create new design", () => (location.href = "index.html")),
+    item("Create new design", () => openHome()),
     item("Make a copy", () => {
       const copy = {
         ...structuredClone(store.design),
@@ -164,7 +166,7 @@ function confirmDelete() {
           {
             onclick: () => {
               deleteDesign(store.design.id);
-              location.href = "index.html";
+              openHome();
             },
           },
           "Delete",
